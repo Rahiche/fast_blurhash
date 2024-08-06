@@ -1,3 +1,7 @@
+## 0.0.1-dev.3
+
+* update description to not metion encoding
+
 ## 0.0.1-dev.2
 
 * update readme with more info

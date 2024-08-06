@@ -1,6 +1,6 @@
 name: fast_blurhash
-description: "A high-performance Dart FFI package for decoding and encoding images using BlurHash, leveraging Rust for faster processing."
-version: 0.0.1-dev.2
+description: "A high-performance Dart FFI package for decoding BlurHash, leveraging Rust for faster processing."
+version: 0.0.1-dev.3
 repository: https://github.com/Rahiche/fast_blurhash
 
 environment:
