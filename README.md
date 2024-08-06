@@ -14,6 +14,13 @@ This template uses the following structure:
 
 
 
-## Testing
+## Benchmarks
 
 To test the performance of the package in release mode, run the `benchmarks.dart` demo.
+
+#### So far I have tried this one iOS and macos release mode, don't run the benchmarks on debug mode.
+
+Run the benchmark using : `flutter run -t lib/benchmarks.dart --release` 
+
+<img width="912" alt="Screenshot 2024-08-06 at 22 47 17" src="https://github.com/user-attachments/assets/3a8c1dc9-0a95-4570-a8d4-40ae5bf2d5f7">
+
