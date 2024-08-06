@@ -57,6 +57,8 @@ class _MainAppState extends State<MainApp> {
     "TgDSt8kDWV~qt7WV_3s:ay?bofj@",
   ];
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,66 +68,79 @@ class _MainAppState extends State<MainApp> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton(
-              heroTag: "RUST",
-              child: const Icon(Icons.card_giftcard),
-              onPressed: () async {
-                List<Duration> durations = [];
+            ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      setState(() => isLoading = true);
+                      List<Duration> durations = [];
 
-                for (int i = 0; i < 500; i++) {
-                  final hash =
-                      hashes[Random.secure().nextInt(hashes.length - 1)];
-                  await Future.delayed(const Duration(milliseconds: 100));
-                  final stopwatch = Stopwatch()..start();
+                      for (int i = 0; i < 500; i++) {
+                        final hash =
+                            hashes[Random.secure().nextInt(hashes.length - 1)];
+                        await Future.delayed(const Duration(milliseconds: 100));
+                        final stopwatch = Stopwatch()..start();
 
-                  imageBytes = decodeBlurhash(
-                    blurhashString: hash,
-                    height: 150,
-                    width: 150,
-                    punch: 1.0,
-                  );
-                  stopwatch.stop();
-                  final elapsedTime = stopwatch.elapsedMicroseconds;
-                  durations.add(Duration(microseconds: elapsedTime));
-                }
+                        imageBytes = decodeBlurhash(
+                          blurhashString: hash,
+                          height: 150,
+                          width: 150,
+                          punch: 1.0,
+                        );
+                        stopwatch.stop();
+                        final elapsedTime = stopwatch.elapsedMicroseconds;
+                        durations.add(Duration(microseconds: elapsedTime));
+                      }
 
-                updateStats(durations, true);
-              },
+                      updateStats(durations, true);
+                      setState(() => isLoading = false);
+                    },
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text("RUST"),
             ),
             const SizedBox(width: 20),
-            FloatingActionButton(
-              heroTag: "DART",
-              child: const Icon(Icons.circle),
-              onPressed: () async {
-                List<Duration> durations = [];
+            ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      setState(() => isLoading = true);
+                      List<Duration> durations = [];
 
-                for (int i = 0; i < 500; i++) {
-                  final hash =
-                      hashes[Random.secure().nextInt(hashes.length - 1)];
+                      for (int i = 0; i < 500; i++) {
+                        final hash =
+                            hashes[Random.secure().nextInt(hashes.length - 1)];
 
-                  await Future.delayed(const Duration(milliseconds: 100));
-                  final stopwatch = Stopwatch()..start();
-                  const width = 150;
-                  const height = 150;
+                        await Future.delayed(const Duration(milliseconds: 100));
+                        final stopwatch = Stopwatch()..start();
+                        const width = 150;
+                        const height = 150;
 
-                  imageBytes = await flutter_blurhash.blurHashDecode(
-                    blurHash: hash,
-                    width: width,
-                    height: height,
-                  );
-                  stopwatch.stop();
-                  final elapsedTime = stopwatch.elapsedMicroseconds;
-                  durations.add(Duration(microseconds: elapsedTime));
-                }
-                updateStats(durations, false);
-              },
+                        imageBytes = await flutter_blurhash.blurHashDecode(
+                          blurHash: hash,
+                          width: width,
+                          height: height,
+                        );
+                        stopwatch.stop();
+                        final elapsedTime = stopwatch.elapsedMicroseconds;
+                        durations.add(Duration(microseconds: elapsedTime));
+                      }
+                      updateStats(durations, false);
+                      setState(() => isLoading = false);
+                    },
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text("DART"),
             ),
           ],
         ),
         body: Column(
           children: [
             const Center(
-              child: CircularProgressIndicator(),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
