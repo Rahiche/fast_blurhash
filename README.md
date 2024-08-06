@@ -1,49 +1,19 @@
 # fast_blurhash
 
-A new Dart FFI package project.
+A Dart FFI package project that uses Rust to decode the blurhash and encode the final image, utilizing FFI to call these functions. This package exists because it works faster than the common Dart implementation and can be tested in release mode by running the `benchmarks.dart` demo. 
 
-## Getting Started
-
-This project is a starting point for a Flutter
-[FFI package](https://flutter.dev/to/ffi-package),
-a specialized package that includes native code directly invoked with Dart FFI.
+It only works with the latest version of Flutter on the main branch and requires the following feature to be enabled: `flutter config --enable-native-assets`. For more details, refer to [this issue](https://github.com/flutter/flutter/issues/129757).
 
 ## Project structure
 
 This template uses the following structure:
 
-* `src`: Contains the native source code, and a CmakeFile.txt file for building
-  that source code into a dynamic library.
+* `rust`: Contains the rust source code. 
 
-* `lib`: Contains the Dart code that defines the API of the plugin, and which
-  calls into the native code using `dart:ffi`.
+* `lib`: Contains the Dart code that defines the API of the plugin, and which calls into the native code using `dart:ffi`.
 
-* `bin`: Contains the `build.dart` that performs the external native builds.
 
-## Building and bundling native code
 
-`build.dart` does the building of native components.
+## Testing
 
-Bundling is done by Flutter based on the output from `build.dart`.
-
-## Binding to native code
-
-To use the native code, bindings in Dart are needed.
-To avoid writing these by hand, they are generated from the header file
-(`src/fast_blurhash.h`) by `package:ffigen`.
-Regenerate the bindings by running `dart run ffigen --config ffigen.yaml`.
-
-## Invoking native code
-
-Very short-running native functions can be directly invoked from any isolate.
-For example, see `sum` in `lib/fast_blurhash.dart`.
-
-Longer-running functions should be invoked on a helper isolate to avoid
-dropping frames in Flutter applications.
-For example, see `sumAsync` in `lib/fast_blurhash.dart`.
-
-## Flutter help
-
-For help getting started with Flutter, view our
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To test the performance of the package in release mode, run the `benchmarks.dart` demo.

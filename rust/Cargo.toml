@@ -1,0 +1,14 @@
+[package]
+name = "fast_blurhash"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.86"
+blurhash = "0.2.3"
+image = "0.25.2"

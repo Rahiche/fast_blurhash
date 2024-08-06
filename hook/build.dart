@@ -1,26 +1,23 @@
-import 'package:native_toolchain_c/native_toolchain_c.dart';
-import 'package:logging/logging.dart';
+import 'dart:io';
+
+import 'package:native_toolchain_rust/native_toolchain_rust.dart';
 import 'package:native_assets_cli/native_assets_cli.dart';
 
-const packageName = 'fast_blurhash';
-
 void main(List<String> args) async {
-  await build(args, (config, output) async {
-    final packageName = config.packageName;
-    final cbuilder = CBuilder.library(
-      name: packageName,
-      assetName: '${packageName}_bindings_generated.dart',
-      sources: [
-        'src/$packageName.c',
-      ],
-      dartBuildFiles: ['hook/build.dart'],
-    );
-    await cbuilder.run(
-      config: config,
-      output: output,
-      logger: Logger('')
-        ..level = Level.ALL
-        ..onRecord.listen((record) => print(record.message)),
-    );
-  });
+  try {
+    await build(args, (BuildConfig buildConfig, BuildOutput output) async {
+      final builder = RustBuilder(
+        // The ID of native assets consists of package name and crate name.
+        package: 'fast_blurhash',
+        cratePath: 'rust',
+        buildConfig: buildConfig,
+      );
+      await builder.run(output: output);
+    });
+  } catch (e) {
+    // FIXME(knopp): Figure out where to log the error
+    // https://github.com/flutter/flutter/issues/147544
+    stdout.writeln(e);
+    exit(1);
+  }
 }
