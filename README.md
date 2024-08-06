@@ -13,7 +13,6 @@ This template uses the following structure:
 * `lib`: Contains the Dart code that defines the API of the plugin, and which calls into the native code using `dart:ffi`.
 
 
-
 ## Benchmarks
 
 To test the performance of the package in release mode, run the `benchmarks.dart` demo.
