@@ -86,6 +86,7 @@ class _MainAppState extends State<MainApp> {
                           height: 150,
                           width: 150,
                           punch: 1.0,
+                          enableCache: false,
                         );
                         stopwatch.stop();
                         final elapsedTime = stopwatch.elapsedMicroseconds;
