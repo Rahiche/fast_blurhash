@@ -1,3 +1,9 @@
+## 0.0.1-dev.4
+
+* Disable Caching in Benchmarks App
+* Enable isLeaf
+* Add Updated Benchmarks Results
+
 ## 0.0.1-dev.3
 
 * update description to not metion encoding
