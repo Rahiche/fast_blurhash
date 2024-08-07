@@ -1660,8 +1660,7 @@ void main() {
       expect(result, isNotEmpty);
     });
 
-
-     test('returns an empty Uint8List invlaid hash', () {
+    test('returns an empty Uint8List invlaid hash', () {
       String blurhashString = 'invalid hash';
       int height = 0;
       int width = 32;
@@ -1687,6 +1686,5 @@ void main() {
 
       expect(resultWidthZero, isEmpty);
     });
-
   });
 }

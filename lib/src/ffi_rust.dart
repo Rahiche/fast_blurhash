@@ -10,8 +10,8 @@ import 'dart:ffi' as ffi;
 /// - `height`: The height of the resulting image.
 /// - `punch`: A parameter to adjust the contrast of the resulting image. Higher values will increase the contrast.
 @ffi.Native<
-    VecU8 Function(
-        ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Uint32, ffi.Uint32, ffi.Float)>(isLeaf: true)
+    VecU8 Function(ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Uint32, ffi.Uint32,
+        ffi.Float)>(isLeaf: true)
 external VecU8 decodeBlurhash(
   ffi.Pointer<ffi.Uint8> blurhash,
   int length,
