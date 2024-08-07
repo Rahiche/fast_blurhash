@@ -13,9 +13,9 @@ pub struct VecU8 {
 }
 
 #[no_mangle]
-pub extern "C" fn decode_blurhash(
+pub extern "C" fn decodeBlurhash(
     blurhash: *const u8,
-    blurhash_len: usize,
+    length: usize,
     width: u32,
     height: u32,
     punch: f32,
@@ -24,7 +24,7 @@ pub extern "C" fn decode_blurhash(
     let start_time = Instant::now();
 
     let blurhash_str = unsafe {
-        match std::str::from_utf8(std::slice::from_raw_parts(blurhash, blurhash_len)) {
+        match std::str::from_utf8(std::slice::from_raw_parts(blurhash, length)) {
             Ok(s) => s,
             Err(_) => return VecU8 { ptr: std::ptr::null_mut(), len: 0, cap: 0 },
         }
