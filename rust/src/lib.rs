@@ -1,9 +1,9 @@
 use blurhash::decode;
-use image::codecs::png::PngEncoder;
 use image::ImageBuffer;
-use image::{ExtendedColorType, ImageEncoder, Rgb};
+use image::{ExtendedColorType, Rgb};
 use std::time::Instant;
 use std::usize;
+use image::codecs::bmp::BmpEncoder;
 
 #[repr(C)]
 pub struct VecU8 {
@@ -55,16 +55,16 @@ pub extern "C" fn decodeBlurhash(
     let image_buffer_duration = image_buffer_start.elapsed();
     println!("Creating image buffer took {:?}", image_buffer_duration);
 
-    // Start time for encoding PNG
+    // Start time for encoding BMP
     let encode_start = Instant::now();
 
-    // Encode the image buffer to a PNG
-    let mut png_buffer = Vec::new();
+    // Encode the image buffer to a BMP
+    let mut bmp_buffer = Vec::new();
     {
-        let encoder = PngEncoder::new(&mut png_buffer);
+        let mut encoder = BmpEncoder::new(&mut bmp_buffer);
 
         if encoder
-            .write_image(&image_buffer, width, height, ExtendedColorType::Rgba8)
+            .encode(&image_buffer, width, height, ExtendedColorType::Rgba8)
             .is_err()
         {
             return VecU8 { ptr: std::ptr::null_mut(), len: 0, cap: 0 };
@@ -72,17 +72,17 @@ pub extern "C" fn decodeBlurhash(
     }
 
     let encode_duration = encode_start.elapsed();
-    println!("Encoding PNG took {:?}", encode_duration);
+    println!("Encoding BMP took {:?}", encode_duration);
 
     // Convert the Vec<u8> into VecU8
     let vec_u8 = VecU8 {
-        ptr: png_buffer.as_ptr() as *mut u8,
-        len: png_buffer.len(),
-        cap: png_buffer.capacity(),
+        ptr: bmp_buffer.as_ptr() as *mut u8,
+        len: bmp_buffer.len(),
+        cap: bmp_buffer.capacity(),
     };
 
     // Prevent Rust from deallocating the vector
-    std::mem::forget(png_buffer);
+    std::mem::forget(bmp_buffer);
 
     let total_duration = start_time.elapsed();
     println!("Total function duration was {:?}", total_duration);

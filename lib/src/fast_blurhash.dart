@@ -1,21 +1,19 @@
 import 'dart:collection';
 import 'dart:ffi' as ffi;
 import 'dart:typed_data';
-
+import 'dart:isolate';
 import 'package:ffi/ffi.dart' as ffi_pacakge;
-
 import 'ffi_rust.dart' as ffi_rust;
 
 /// This function serves as a warm-up for the decodeBlurhash function.
 /// The initial call to decodeBlurhash can be slow, so this function should be called
 /// anywhere in the code before using decodeBlurhash to improve performance.
 void setup() {
-// TODO: check if there is another way to warmup and avoid the cost of the first call
-
+  // TODO: check if there is another way to warmup and avoid the cost of the first call
   decodeBlurhash(
     blurhashString: "THEC,t~qWGb=IUxI%ejEIBR~xuaf",
-    height: 150,
-    width: 150,
+    height: 1,
+    width: 1,
     punch: 1,
   );
 }
@@ -28,9 +26,9 @@ void setup() {
 /// - `enableCache`: Whether to enable caching (default: `true`).
 Uint8List decodeBlurhash({
   required String blurhashString,
-  required int height,
-  required int width,
-  required double punch,
+  int height = 32,
+  int width = 32,
+  double punch = 1.0,
   bool enableCache = true,
 }) {
   // Check if the result is already in the cache
@@ -72,6 +70,26 @@ Uint8List decodeBlurhash({
   } finally {
     ffi_pacakge.calloc.free(blurhashPointer);
   }
+}
+
+/// Runs the decodeBlurhash function in a separate isolate.
+/// Parameters are the same as decodeBlurhash.
+Future<Uint8List> decodeBlurhashIsolate({
+  required String blurhashString,
+  int height = 32,
+  int width = 32,
+  double punch = 1.0,
+  bool enableCache = true,
+}) async {
+  return await Isolate.run(
+    () => decodeBlurhash(
+      blurhashString: blurhashString,
+      height: height,
+      width: width,
+      punch: punch,
+      enableCache: enableCache,
+    ),
+  );
 }
 
 final Map<String, Uint8List> _cache = HashMap();

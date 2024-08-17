@@ -1,6 +1,6 @@
 # fast_blurhash
 
-A Dart FFI package project that uses Rust to decode the blurhash and encode the final image, utilizing FFI to call these functions. This package exists because it works faster than the common Dart implementation and can be tested in release mode by running the `benchmarks.dart` demo. 
+A Dart FFI package project that uses Rust to decode the blurhash and encode the final image, utilizing FFI to call these functions. This package exists because it works +20x faster on average than the common Dart implementation and can be tested in release mode by running the benchmarks.dart demo.
 
 It only works with the latest version of Flutter on the main branch and requires the following feature to be enabled: `flutter config --enable-native-assets`. For more details, refer to [this issue](https://github.com/flutter/flutter/issues/129757).
 
@@ -30,8 +30,8 @@ Run the benchmark using : `flutter run -t lib/benchmarks.dart --release`
 
 
 ### iPhone 15 pro:
-<img src="https://i.imgur.com/qpfqNvj.png" alt="screenshot from the benchmarks demo on iPhone 15 pro" width="589.5" />
+<img src="https://i.imgur.com/xLpbVX5.jpeg" alt="screenshot from the benchmarks demo on iPhone 15 pro" width="589.5" />
 
-### M1 Macbook Pro  
-<img src="https://i.imgur.com/Bv3frB3.png" alt="screenshot from the benchmarks demo on macbook pro" width="912" />
+### M1 Macbook Pro:
+<img src="https://i.imgur.com/cFh5Kry.png" alt="screenshot from the benchmarks demo on macbook pro" width="912" />
 
