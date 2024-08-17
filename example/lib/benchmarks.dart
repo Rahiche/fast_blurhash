@@ -16,19 +16,21 @@ class MainApp extends StatefulWidget {
   @override
   State<MainApp> createState() => _MainAppState();
 }
-
 class _MainAppState extends State<MainApp> {
   Uint8List? imageBytes;
-  List<Duration> _durations = [];
-  double avgTimeRust = 0;
-  double avgTimeDart = 0;
+  List<Duration> _durationsRust = [];
+  List<Duration> _durationsDart = [];
+  int avgTimeRust = 0;
+  int avgTimeDart = 0;
   int bestTimeRust = 0;
   int worstTimeRust = 0;
   int bestTimeDart = 0;
   int worstTimeDart = 0;
+  double _width = 32;
+  double _height = 32;
+  double _iterations = 500;
 
   void updateStats(List<Duration> durations, bool isRust) {
-    _durations = List.from(durations);
     int totalMicroseconds =
         durations.fold(0, (sum, duration) => sum + duration.inMicroseconds);
     double avgMicroseconds = totalMicroseconds / durations.length;
@@ -38,13 +40,14 @@ class _MainAppState extends State<MainApp> {
         durations.map((e) => e.inMicroseconds).reduce((a, b) => a > b ? a : b);
 
     setState(() {
-      _durations = List.from(durations);
       if (isRust) {
-        avgTimeRust = avgMicroseconds;
+        _durationsRust = List.from(durations);
+        avgTimeRust = avgMicroseconds.toInt();
         bestTimeRust = bestMicroseconds;
         worstTimeRust = worstMicroseconds;
       } else {
-        avgTimeDart = avgMicroseconds;
+        _durationsDart = List.from(durations);
+        avgTimeDart = avgMicroseconds.toInt();
         bestTimeDart = bestMicroseconds;
         worstTimeDart = worstMicroseconds;
       }
@@ -75,7 +78,7 @@ class _MainAppState extends State<MainApp> {
                       setState(() => isLoading = true);
                       List<Duration> durations = [];
 
-                      for (int i = 0; i < 500; i++) {
+                      for (int i = 0; i < _iterations.toInt(); i++) {
                         final hash =
                             hashes[Random.secure().nextInt(hashes.length - 1)];
                         await Future.delayed(const Duration(milliseconds: 100));
@@ -83,8 +86,8 @@ class _MainAppState extends State<MainApp> {
 
                         imageBytes = decodeBlurhash(
                           blurhashString: hash,
-                          height: 150,
-                          width: 150,
+                          height: _height.toInt(),
+                          width: _width.toInt(),
                           punch: 1.0,
                           enableCache: false,
                         );
@@ -108,24 +111,23 @@ class _MainAppState extends State<MainApp> {
                       setState(() => isLoading = true);
                       List<Duration> durations = [];
 
-                      for (int i = 0; i < 500; i++) {
+                      for (int i = 0; i < _iterations.toInt(); i++) {
                         final hash =
                             hashes[Random.secure().nextInt(hashes.length - 1)];
 
                         await Future.delayed(const Duration(milliseconds: 100));
                         final stopwatch = Stopwatch()..start();
-                        const width = 150;
-                        const height = 150;
 
                         imageBytes = await flutter_blurhash.blurHashDecode(
                           blurHash: hash,
-                          width: width,
-                          height: height,
+                          width: _width.toInt(),
+                          height: _height.toInt(),
                         );
                         stopwatch.stop();
                         final elapsedTime = stopwatch.elapsedMicroseconds;
                         durations.add(Duration(microseconds: elapsedTime));
                       }
+
                       updateStats(durations, false);
                       setState(() => isLoading = false);
                     },
@@ -137,46 +139,105 @@ class _MainAppState extends State<MainApp> {
         ),
         body: Column(
           children: [
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircularProgressIndicator(),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const Text(
-                    "RUST Benchmark",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Slider(
+                    value: _width,
+                    min: 8,
+                    max: 512,
+                    divisions: 50,
+                    label: 'Width: ${_width.toInt()}',
+                    onChanged: (double value) {
+                      setState(() {
+                        _width = value;
+                      });
+                    },
                   ),
-                  Text("Average Time: $avgTimeRust µs"),
-                  Text("Best Time: $bestTimeRust µs"),
-                  Text("Worst Time: $worstTimeRust µs"),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "DART Benchmark",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Slider(
+                    value: _height,
+                    min: 8,
+                    max: 512,
+                    divisions: 50,
+                    label: 'Height: ${_height.toInt()}',
+                    onChanged: (double value) {
+                      setState(() {
+                        _height = value;
+                      });
+                    },
                   ),
-                  Text("Average Time: $avgTimeDart µs"),
-                  Text("Best Time: $bestTimeDart µs"),
-                  Text("Worst Time: $worstTimeDart µs"),
+                  Slider(
+                    value: _iterations,
+                    min: 10,
+                    max: 1000,
+                    divisions: 100,
+                    label: 'Iterations: ${_iterations.toInt()}',
+                    onChanged: (double value) {
+                      setState(() {
+                        _iterations = value;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                reverse: true,
-                itemCount: _durations.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(
-                      _durations[index].inMicroseconds.toString(),
-                      style: const TextStyle(color: Colors.black),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text(
+                          "RUST Benchmark",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Text("Average Time: $avgTimeRust µs"),
+                        Text("Best Time: $bestTimeRust µs"),
+                        Text("Worst Time: $worstTimeRust µs"),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: _durationsRust.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                title: Text(
+                                  _durationsRust[index].inMicroseconds.toString(),
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text(
+                          "DART Benchmark",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Text("Average Time: $avgTimeDart µs"),
+                        Text("Best Time: $bestTimeDart µs"),
+                        Text("Worst Time: $worstTimeDart µs"),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: _durationsDart.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                title: Text(
+                                  _durationsDart[index].inMicroseconds.toString(),
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
