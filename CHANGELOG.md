@@ -1,3 +1,10 @@
+## 0.0.1-dev.6
+
+* Changed encoding format from PNG to BMP
+* Added `decodeBlurhashIsolate` function to run decoding on a separate isolate
+* Implemented the sample app
+* Enhanced benchmarking example with additional options
+ 
 ## 0.0.1-dev.5
 
 * dart format .

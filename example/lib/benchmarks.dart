@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter_blurhash/flutter_blurhash.dart' as flutter_blurhash;
-
 import 'package:fast_blurhash/fast_blurhash.dart';
 import 'package:flutter/material.dart';
 
@@ -147,7 +146,7 @@ class _MainAppState extends State<MainApp> {
                     value: _width,
                     min: 8,
                     max: 512,
-                    divisions: 50,
+                    divisions: 504,
                     label: 'Width: ${_width.toInt()}',
                     onChanged: (double value) {
                       setState(() {
@@ -159,7 +158,7 @@ class _MainAppState extends State<MainApp> {
                     value: _height,
                     min: 8,
                     max: 512,
-                    divisions: 50,
+                    divisions: 504,
                     label: 'Height: ${_height.toInt()}',
                     onChanged: (double value) {
                       setState(() {

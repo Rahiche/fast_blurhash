@@ -32,6 +32,6 @@ Run the benchmark using : `flutter run -t lib/benchmarks.dart --release`
 ### iPhone 15 pro:
 <img src="https://i.imgur.com/qpfqNvj.png" alt="screenshot from the benchmarks demo on iPhone 15 pro" width="589.5" />
 
-### M1 Macbook Pro  
-<img src="https://i.imgur.com/Bv3frB3.png" alt="screenshot from the benchmarks demo on macbook pro" width="912" />
+### M1 Macbook Pro:
+<img src="https://i.imgur.com/cFh5Kry.png" alt="screenshot from the benchmarks demo on macbook pro" width="912" />
 
