@@ -1,3 +1,7 @@
+## 0.0.1-dev.7
+
+* Restart pana 
+
 ## 0.0.1-dev.6
 
 * Changed encoding format from PNG to BMP
